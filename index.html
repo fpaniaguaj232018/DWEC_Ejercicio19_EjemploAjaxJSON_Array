@@ -7,29 +7,37 @@
     <link rel="stylesheet" href="css/estilo.css">
     <title>(Ejemplo Ajax)</title>
     <script>
-        var request = new XMLHttpRequest();
+        var request;
         
-        function ejecutarLlamadaAjax(){
+        function ejecutarLlamadaAjax(plataforma){
+            request = new XMLHttpRequest();
             request.onreadystatechange=function(){
                 if(request.readyState==4 && request.status==200){
                     var juegos = JSON.parse(request.responseText);
-                    generarHTML(juegos);
+                    generarHTML(juegos, plataforma);
                 }
             }
             request.overrideMimeType("text/plain");
-            request.open("GET","http://localhost/DWEC_Ejercicio19_EjemploAjaxJSON_Array/json/juegos.json");
+            request.open("GET","https://fpaniaguaj232018.github.io/juegos.json");
             request.send(null);
         }
-        function generarHTML(juegos){
+        function generarHTML(juegos, plataforma){
+            //SUPONEMOS QUE HEMOS ELIGOD PS4
             var vjs = juegos.videojuegos;
+            var total = 0;
             for (let i=0;i<vjs.length;i++){
-                console.log(vjs[i].titulo);
+                if (vjs[i].plataforma==plataforma){
+                    total = total + parseFloat(vjs[i].precio);
+                }
             }
+            total = total.toFixed(2);
+            console.log("TOTAL VENDIDO " + plataforma + ":" + total);
         }
     </script>
 </head>
 <body>
     <H1>PROYECTO BASE</H1>
-    <input type="button" value="¡VIVA AJAX!" onclick="ejecutarLlamadaAjax()">
+    <input type="button" value="PS4" onclick="ejecutarLlamadaAjax('PS4')">
+    <input type="button" value="XBOX ONE" onclick="ejecutarLlamadaAjax('XBOX ONE')">
 </body>
 </html>
